@@ -43,6 +43,12 @@ public OnFilterScriptExit()
     return 1;
 }
 
+public OnPlayerConnect(playerid)
+{
+    PreloadAllAnimLibs(playerid);
+    return 1;
+}
+
 public OnPlayerEnterDynamicArea(playerid, areaid)
 {
     new string[40+(-2+1)+(-2+1)];
@@ -102,5 +108,16 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             }
         }
     }
+    return 1;
+}
+
+stock PreloadAnimLib(playerid, animlib[])
+{
+    return ApplyAnimation(playerid, animlib, "null", 0.0, 0, 0, 0, 0, 0);
+}
+
+stock PreloadAllAnimLibs(playerid)
+{
+    PreloadAnimLib(playerid, "ATTRACTORS");
     return 1;
 }
