@@ -17,6 +17,7 @@
 #define C_F_ORANGE                      0xFFAA00FF
 #define C_ORANGE                        "{FFAA00}"
 
+new Text:Help_TextDraw;
 new const Float:Tree_Position[SPAWN_TREE][6] = { // Позиции спавна
     {77.2846, -83.7600, 0.7090, 0.0, 0.0, 0.0}, // x, y, z, rx, ry, rz
     {77.8345, -72.5980, 0.6524, 0.0, 0.0, 0.0},
@@ -47,6 +48,7 @@ new pInfo[MAX_PLAYERS][playerinfo];
 
 public OnFilterScriptInit()
 {
+    CreateTextDrawsForServer();
     for(new spawnt = 0; spawnt < SPAWN_TREE; spawnt++)
     {
         treeInfo[spawnt][tObject] = CreateDynamicObject(TREE_MODEL, Tree_Position[spawnt][0], Tree_Position[spawnt][1], Tree_Position[spawnt][2]-1.0, Tree_Position[spawnt][3], Tree_Position[spawnt][4], Tree_Position[spawnt][5], _, _, _, TREE_RENDER);
@@ -83,7 +85,8 @@ public OnPlayerEnterDynamicArea(playerid, areaid)
                 return 1;
             pInfo[playerid][pInDynamicArea] = true;
             pInfo[playerid][pDynamicArea] = areaid;
-            SendClientMessage(playerid, C_F_ORANGE, "Нажмите \"ALT\" чтобы собрать мандарины.");
+            TextDrawShowForPlayer(playerid, Help_TextDraw);
+            // SendClientMessage(playerid, C_F_ORANGE, "Нажмите \"ALT\" чтобы собрать мандарины.");
         }
     }
     return 1;
@@ -99,6 +102,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
                 return 1;
             pInfo[playerid][pInDynamicArea] = false;
             pInfo[playerid][pDynamicArea] = EOS;
+            TextDrawHideForPlayer(playerid, Help_TextDraw);
         }
     }
     return 1;
@@ -153,6 +157,7 @@ public PlayerStopAnimation(playerid)
         }
     }
     pInfo[playerid][pInDynamicArea] = false;
+    TextDrawHideForPlayer(playerid, Help_TextDraw);
     return KillTimer(pInfo[playerid][pAnimationTimer]);
 }
 
@@ -177,4 +182,9 @@ stock PreloadAllAnimLibs(playerid)
     PreloadAnimLib(playerid, "INT_HOUSE");
     PreloadAnimLib(playerid, "PED");
     return 1;
+}
+
+stock CreateTextDrawsForServer()
+{
+    #include ../include/others/textdraw
 }
